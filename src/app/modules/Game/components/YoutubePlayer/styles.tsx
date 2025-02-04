@@ -188,6 +188,26 @@ const VideoName = styled.div<{
   }
 `;
 
+const RightControlsOverlay = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 48px;
+  width: 200px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.01);
+  z-index: 10;
+`;
+
+const RecommendationsOverlay = styled.div`
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.01);
+  z-index: 10;
+`;
+
 export default {
   Container,
   PlayerWrapper,
@@ -195,4 +215,6 @@ export default {
   VideoCard,
   VideoPreview,
   VideoName,
+  RightControlsOverlay,
+  RecommendationsOverlay,
 };

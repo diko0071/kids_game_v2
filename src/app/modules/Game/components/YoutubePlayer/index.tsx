@@ -152,28 +152,36 @@ const YoutubePlayer: React.FC = () => {
     <S.Container>
       <S.PlayerWrapper>
         {playlistId ? (
-          <YouTube
-            key={playlistId}
-            videoId={playlistId}
-            opts={{
-              ...opts,
-              playerVars: {
-                ...opts.playerVars,
-                listType: "playlist",
-                list: playlistId,
-              },
-            }}
-            onReady={handlePlayerReady}
-            onError={handlePlayerError}
-          />
+          <>
+            <YouTube
+              key={playlistId}
+              videoId={playlistId}
+              opts={{
+                ...opts,
+                playerVars: {
+                  ...opts.playerVars,
+                  listType: "playlist",
+                  list: playlistId,
+                },
+              }}
+              onReady={handlePlayerReady}
+              onError={handlePlayerError}
+            />
+            <S.RightControlsOverlay />
+            <S.RecommendationsOverlay />
+          </>
         ) : (
-          <YouTube
-            key={videoId}
-            videoId={videoId}
-            opts={opts}
-            onReady={handlePlayerReady}
-            onError={handlePlayerError}
-          />
+          <>
+            <YouTube
+              key={videoId}
+              videoId={videoId}
+              opts={opts}
+              onReady={handlePlayerReady}
+              onError={handlePlayerError}
+            />
+            <S.RightControlsOverlay />
+            <S.RecommendationsOverlay />
+          </>
         )}
       </S.PlayerWrapper>
       <S.VideoList>
@@ -190,7 +198,7 @@ const YoutubePlayer: React.FC = () => {
               key={`card_${id}`}
               onClick={() => {
                 if (!active) {
-                  const newParams = new URLSearchParams(searchParams);
+                  const newParams = new URLSearchParams(searchParams.toString());
                   newParams.set("videoId", id);
                   router.replace(`?${newParams.toString()}`);
                   dispatch(gameInfoActions.setVideoId({ videoId: id }));

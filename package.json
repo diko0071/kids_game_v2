@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
+    "@types/react-youtube": "^7.6.2",
     "axios": "^1.2.0",
     "dayjs": "^1.11.6",
     "microsoft-cognitiveservices-speech-sdk": "^1.42.0",
