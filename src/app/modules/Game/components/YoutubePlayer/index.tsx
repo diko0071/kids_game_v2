@@ -39,6 +39,7 @@ const exitFullscreen = () => {
 
 const YoutubePlayer: React.FC = () => {
   const [canStartExercises, setCanStartExercises] = useState<boolean>(true);
+  const [wasInFullscreen, setWasInFullscreen] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -84,15 +85,18 @@ const YoutubePlayer: React.FC = () => {
 
     if (currentGameTypes.length > 0) {
       playerRef.current.pauseVideo?.();
+      setWasInFullscreen(!!document.fullscreenElement);
       exitFullscreen();
-    } else if (!isSpecialExercises) {
+    } else {
       playerRef.current.playVideo?.();
-      setFullscreen(playerRef);
+      if (!isSpecialExercises && wasInFullscreen) {
+        setFullscreen(playerRef);
+      }
       setTimeout(() => {
         setCanStartExercises(true);
       }, 5000);
     }
-  }, [currentGameTypes, isSpecialExercises]);
+  }, [currentGameTypes, isSpecialExercises, wasInFullscreen]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -211,6 +215,9 @@ const YoutubePlayer: React.FC = () => {
           );
         })}
       </S.VideoList>
+      <S.Footer>
+        <a href="https://github.com/diko0071/kids_game_v2" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </S.Footer>
     </S.Container>
   );
 };

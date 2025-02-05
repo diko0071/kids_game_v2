@@ -194,8 +194,14 @@ const RightControlsOverlay = styled.div`
   right: 48px;
   width: 200px;
   height: 100px;
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(255, 0, 0, 0);
   z-index: 10;
+
+  @media only screen and (max-width: 900px) {
+    width: 70px;
+    height: 50px;
+    right: 48px;
+  }
 `;
 
 const RecommendationsOverlay = styled.div`
@@ -204,10 +210,38 @@ const RecommendationsOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 200px;
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(0, 0, 255, 0);
   z-index: 10;
+
+  @media only screen and (max-width: 900px) {
+    height: 100px;
+    bottom: 70px;
+  }
 `;
 
+const Footer = styled.div`
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #666;
+  font-size: 14px;
+  text-align: center;
+  display: flex;
+  gap: 8px;
+  
+  a {
+    color: #666;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  span {
+    color: #666;
+  }
+`;
 
 export default {
   Container,
@@ -218,4 +252,5 @@ export default {
   VideoName,
   RightControlsOverlay,
   RecommendationsOverlay,
+  Footer,
 };
