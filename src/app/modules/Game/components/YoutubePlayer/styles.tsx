@@ -2,72 +2,18 @@ import styled from "styled-components";
 import { COLORS } from "../../constants";
 
 const Container = styled.div`
-  z-index: 2;
   width: 100%;
-  position: relative;
-  margin: 60px auto;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px;
   display: grid;
-  grid-template-columns: 1fr 300px;
-  align-items: center;
-  justify-content: flex-start;
-  font-size: 24px;
-  font-family: "Roboto", sans-serif;
+  grid-template-columns: 1fr 260px;
+  gap: 10px;
+`;
 
-  &:after,
-  &:before {
-    mix-blend-mode: multiply;
-    filter: none;
-    z-index: -1;
-    content: "";
-    width: calc(100% + 90px);
-    height: calc(100% + 90px);
-    position: absolute;
-    left: -45px;
-    animation: anim-ramka-7 8s ease-in-out infinite;
-  }
-  @keyframes anim-ramka-7 {
-    0%,
-    100% {
-      clip-path: polygon(
-        0 0,
-        calc(100% - (33px)) calc(0% + (33px)),
-        100% 100%,
-        calc(0% + (33px)) calc(100% - (33px))
-      );
-    }
-    50% {
-      clip-path: polygon(
-        calc(0% + (33px)) calc(0% + (33px)),
-        100% 0,
-        calc(100% - (33px)) calc(100% - (33px)),
-        0 100%
-      );
-    }
-  }
-  &:after {
-    animation-delay: -5s;
-    background-color: ${COLORS.lightBlue};
-    clip-path: polygon(
-      0 0,
-      calc(100% - (33px)) calc(0% + (33px)),
-      100% 100%,
-      calc(0% + (33px)) calc(100% - (33px))
-    );
-  }
-  &:before {
-    background-color: ${COLORS.blue};
-    clip-path: polygon(
-      calc(0% + (33px)) calc(0% + (33px)),
-      100% 0,
-      calc(100% - (33px)) calc(100% - (33px)),
-      0 100%
-    );
-  }
-
-  @media only screen and (max-width: 900px) {
-    grid-template-columns: 1fr;
-    margin: 48px auto;
-  }
+const MainContent = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const PlayerWrapper = styled.div`
@@ -76,7 +22,8 @@ const PlayerWrapper = styled.div`
   padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
-  border-radius: 10px 0 0 10px;
+  border-radius: 8px;
+  background: ${COLORS.white};
 
   iframe {
     position: absolute;
@@ -85,107 +32,88 @@ const PlayerWrapper = styled.div`
     width: 100%;
     height: 100%;
   }
+`;
 
-  @media only screen and (max-width: 900px) {
-    grid-template-columns: 1fr;
-    border-radius: 10px 10px 0 0;
-  }
+const SideContent = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  height: calc(100vh - 20px);
+  position: sticky;
+  top: 10px;
 `;
 
 const VideoList = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  max-width: 300px;
-  max-height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
   background: ${COLORS.pink};
+  border-radius: 8px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  padding: 12px 0;
+  gap: 6px;
+  overflow-y: auto;
 
   &::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
+    width: 4px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${COLORS.pink};
-    border-radius: 50px;
-    border: 2px solid ${COLORS.white};
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease-in-out;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
     background-color: ${COLORS.darkPink};
+    border-radius: 4px;
   }
+`;
 
-  &::-webkit-scrollbar-track {
-    border-radius: 10px;
-    padding: 2px;
-  }
+const CategoryList = styled(VideoList)`
+  background: ${COLORS.lightBlue};
 
-  @media only screen and (max-width: 900px) {
-    position: static;
-    flex-direction: row;
-    width: 100%;
-    max-width: 100%;
-    border-radius: 0 0 10px 10px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-right: 16px;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${COLORS.blue};
   }
 `;
 
 const VideoCard = styled.div<{
   active: boolean;
 }>`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
   cursor: ${({ active }) => (active ? "auto" : "pointer")};
-  padding-left: 12px;
-  transition: 0.3s all;
+  transition: 0.2s all;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 6px;
+  background: ${COLORS.white};
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
   }
 `;
+
+const CategoryCard = styled(VideoCard)``;
 
 const VideoPreview = styled.img`
-  width: 300px;
-  height: 168px;
+  width: 100%;
+  aspect-ratio: 16/9;
   object-fit: cover;
-
-  @media only screen and (max-width: 900px) {
-    width: 160px;
-    height: 100px;
-  }
+  border-radius: 4px;
 `;
+
+const CategoryPreview = styled(VideoPreview)``;
+
 const VideoName = styled.div<{
   active: boolean;
 }>`
-  padding: 8px;
   color: ${({ active }) => (active ? COLORS.darkPink : COLORS.gray)};
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: bold;
-  transition: 0.3s all ease;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: ${({ active }) => (active ? "bold" : "normal")};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;
 
-  @media only screen and (max-width: 900px) {
-    font-size: 14px;
-    line-height: 18px;
-  }
+const CategoryName = styled(VideoName)`
+  color: ${({ active }) => (active ? COLORS.blue : COLORS.gray)};
 `;
 
 const RightControlsOverlay = styled.div`
@@ -245,11 +173,17 @@ const Footer = styled.div`
 
 export default {
   Container,
+  MainContent,
   PlayerWrapper,
+  SideContent,
   VideoList,
+  CategoryList,
   VideoCard,
+  CategoryCard,
   VideoPreview,
+  CategoryPreview,
   VideoName,
+  CategoryName,
   RightControlsOverlay,
   RecommendationsOverlay,
   Footer,

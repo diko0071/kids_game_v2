@@ -7,7 +7,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import S from "./styles";
 import { useAppDispatch, useAppSelector } from "../../../../services/hooks";
 import { gameInfoActions, gameInfoSelector } from "../../services/gameInfo";
-import { GameList, VIDEOS } from "../../constants";
+import { VIDEO_CATEGORIES, VIDEOS } from "../../constants";
 import { getRandomGames } from "../../utils/getRandomGames";
 
 const setFullscreen = (playerRef: any) => {
@@ -40,6 +40,7 @@ const exitFullscreen = () => {
 const YoutubePlayer: React.FC = () => {
   const [canStartExercises, setCanStartExercises] = useState<boolean>(true);
   const [wasInFullscreen, setWasInFullscreen] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -154,69 +155,97 @@ const YoutubePlayer: React.FC = () => {
 
   return (
     <S.Container>
-      <S.PlayerWrapper>
-        {playlistId ? (
-          <>
-            <YouTube
-              key={playlistId}
-              videoId={playlistId}
-              opts={{
-                ...opts,
-                playerVars: {
-                  ...opts.playerVars,
-                  listType: "playlist",
-                  list: playlistId,
-                },
-              }}
-              onReady={handlePlayerReady}
-              onError={handlePlayerError}
-            />
-            <S.RightControlsOverlay />
-            <S.RecommendationsOverlay />
-          </>
-        ) : (
-          <>
-            <YouTube
-              key={videoId}
-              videoId={videoId}
-              opts={opts}
-              onReady={handlePlayerReady}
-              onError={handlePlayerError}
-            />
-            <S.RightControlsOverlay />
-            <S.RecommendationsOverlay />
-          </>
-        )}
-      </S.PlayerWrapper>
-      <S.VideoList>
-        {VIDEOS.map(({ id, name }, index) => {
-          const previewSrc = `https://img.youtube.com/vi/${id}/0.jpg`;
-          const active = videoId === id;
+      <S.MainContent>
+        <S.PlayerWrapper>
+          {playlistId ? (
+            <>
+              <YouTube
+                key={playlistId}
+                videoId={playlistId}
+                opts={{
+                  ...opts,
+                  playerVars: {
+                    ...opts.playerVars,
+                    listType: "playlist",
+                    list: playlistId,
+                  },
+                }}
+                onReady={handlePlayerReady}
+                onError={handlePlayerError}
+              />
+              <S.RightControlsOverlay />
+              <S.RecommendationsOverlay />
+            </>
+          ) : (
+            <>
+              <YouTube
+                key={videoId}
+                videoId={videoId}
+                opts={opts}
+                onReady={handlePlayerReady}
+                onError={handlePlayerError}
+              />
+              <S.RightControlsOverlay />
+              <S.RecommendationsOverlay />
+            </>
+          )}
+        </S.PlayerWrapper>
+      </S.MainContent>
 
-          return (
-            <S.VideoCard
-              ref={(el) => {
-                videoRefs.current[index] = el;
-              }}
-              active={active}
-              key={`card_${id}`}
-              onClick={() => {
-                if (!active) {
-                  const newParams = new URLSearchParams(searchParams.toString());
-                  newParams.set("videoId", id);
-                  router.replace(`?${newParams.toString()}`);
-                  dispatch(gameInfoActions.setVideoId({ videoId: id }));
-                }
-              }}
+      <S.SideContent>
+        <S.VideoList>
+          {(selectedCategory 
+            ? VIDEO_CATEGORIES.find(cat => cat.id === selectedCategory)?.videos || VIDEOS.slice(0, 5)
+            : VIDEOS.slice(0, 5)
+          ).map(({ id, name }, index) => {
+            const previewSrc = `https://img.youtube.com/vi/${id}/0.jpg`;
+            const active = videoId === id;
+
+            return (
+              <S.VideoCard
+                ref={(el) => {
+                  videoRefs.current[index] = el;
+                }}
+                active={active}
+                key={`card_${id}`}
+                onClick={() => {
+                  if (!active) {
+                    const newParams = new URLSearchParams(searchParams.toString());
+                    newParams.set("videoId", id);
+                    router.replace(`?${newParams.toString()}`);
+                    dispatch(gameInfoActions.setVideoId({ videoId: id }));
+                  }
+                }}
+              >
+                <S.VideoPreview src={previewSrc} alt={name} />
+                <S.VideoName active={active}>{name}</S.VideoName>
+              </S.VideoCard>
+            );
+          })}
+        </S.VideoList>
+
+        <S.CategoryList>
+          {VIDEO_CATEGORIES.map((category) => (
+            <S.CategoryCard
+              key={`category_${category.id}`}
+              active={selectedCategory === category.id}
+              onClick={() => setSelectedCategory(
+                selectedCategory === category.id ? null : category.id
+              )}
             >
-              <S.VideoPreview src={previewSrc} />
-              <S.VideoName active={active}>{name}</S.VideoName>
-            </S.VideoCard>
-          );
-        })}
-      </S.VideoList>
+              <S.CategoryPreview src={category.image} alt={category.name} />
+              <S.CategoryName active={selectedCategory === category.id}>
+                {category.name}
+              </S.CategoryName>
+            </S.CategoryCard>
+          ))}
+        </S.CategoryList>
+      </S.SideContent>
+
       <S.Footer>
-        <a href="https://github.com/diko0071/kids_game_v2" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/diko0071/kids_game_v2" target="_blank" rel="noopener noreferrer">
+          GitHub
+        </a>
       </S.Footer>
     </S.Container>
   );

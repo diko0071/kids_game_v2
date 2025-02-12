@@ -26,6 +26,46 @@ export enum VoiceList {
   ru = "ru-RU-SvetlanaNeural",
 }
 
+export const VIDEO_CATEGORIES = [
+  {
+    id: "masha",
+    name: "Маша и Медведь",
+    image: "https://i.ytimg.com/vi/ZcZVtt-baas/maxresdefault.jpg",
+    videos: [
+      { id: "ZcZVtt-baas", name: "Маша и Медведь - Сборник лучших серий" }
+    ]
+  },
+  {
+    id: "fixiki",
+    name: "Фиксики",
+    image: "https://i.ytimg.com/vi/To5yh3rDuRs/maxresdefault.jpg",
+    videos: [
+      { id: "To5yh3rDuRs", name: "Фиксики - Познавательные мультики" }
+    ]
+  },
+  {
+    id: "babybus",
+    name: "BabyBus",
+    image: "https://i.ytimg.com/vi/Wec8wGSOQ6A/maxresdefault.jpg",
+    videos: [
+      { id: "Wec8wGSOQ6A", name: "BabyBus - Безопасность в жизни" },
+      { id: "ur3A8uT-l3E", name: "BabyBus - Спасатели и друзья" },
+      { id: "vMuTrVbAOcs", name: "BabyBus - Развивающие песенки" },
+      { id: "KZSMYjmL-4g", name: "BabyBus - Волшебные истории" },
+      { id: "q-yhcaW_ZQk", name: "BabyBus - Песенки про машинки" }
+    ]
+  },
+  {
+    id: "blippi",
+    name: "Blippi",
+    image: "https://i.ytimg.com/vi/_pWhx7l_48g/maxresdefault.jpg",
+    videos: [
+      { id: "_pWhx7l_48g", name: "Blippi - Educational Videos for Kids" }
+    ]
+  }
+];
+
+// Оставляем старый VIDEOS для обратной совместимости
 export const VIDEOS = [
   // Русские мультики
   { id: "ZcZVtt-baas", name: "Маша и Медведь - Сборник лучших серий" },
