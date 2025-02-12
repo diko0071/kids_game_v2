@@ -7,7 +7,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import S from "./styles";
 import { useAppDispatch, useAppSelector } from "../../../../services/hooks";
 import { gameInfoActions, gameInfoSelector } from "../../services/gameInfo";
-import { VIDEO_CATEGORIES, VIDEOS } from "../../constants";
+import { GameList, VIDEO_CATEGORIES, VIDEOS } from "../../constants";
 import { getRandomGames } from "../../utils/getRandomGames";
 
 const setFullscreen = (playerRef: any) => {
@@ -41,6 +41,8 @@ const YoutubePlayer: React.FC = () => {
   const [canStartExercises, setCanStartExercises] = useState<boolean>(true);
   const [wasInFullscreen, setWasInFullscreen] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [startTime, setStartTime] = useState<number>(Date.now());
+  const [isTimerActive, setIsTimerActive] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -88,6 +90,7 @@ const YoutubePlayer: React.FC = () => {
       playerRef.current.pauseVideo?.();
       setWasInFullscreen(!!document.fullscreenElement);
       exitFullscreen();
+      setIsTimerActive(false);
     } else {
       playerRef.current.playVideo?.();
       if (!isSpecialExercises && wasInFullscreen) {
@@ -95,43 +98,38 @@ const YoutubePlayer: React.FC = () => {
       }
       setTimeout(() => {
         setCanStartExercises(true);
+        setStartTime(Date.now());
+        setIsTimerActive(true);
       }, 5000);
     }
   }, [currentGameTypes, isSpecialExercises, wasInFullscreen]);
 
   useEffect(() => {
+    if (!isTimerActive) return;
+
     const interval = setInterval(() => {
-      if (playerRef.current) {
-        const currentTime = Math.floor(playerRef.current.getCurrentTime());
+      const currentTime = Math.floor((Date.now() - startTime) / 1000);
 
-        if (
-          currentTime % (showFrequency * 60) === 0 &&
-          currentTime !== 0 &&
-          !currentGameTypes?.length &&
-          canStartExercises
-        ) {
-          const randomGames = getRandomGames(settings).map((key) => {
-            if (key === GameList.syllableMatching) {
-              return GameList.numbers;
-            }
-
-            return key;
-          });
-          dispatch(gameInfoActions.setGames(randomGames));
-          dispatch(gameInfoActions.setIsSpecialExercises(false));
-          setCanStartExercises(false);
-        }
+      if (
+        currentTime % (showFrequency * 60) === 0 &&
+        currentTime !== 0 &&
+        !currentGameTypes?.length &&
+        canStartExercises
+      ) {
+        const randomGames = getRandomGames(settings).map((key) => {
+          if (key === GameList.syllableMatching) {
+            return GameList.numbers;
+          }
+          return key;
+        });
+        dispatch(gameInfoActions.setGames(randomGames));
+        dispatch(gameInfoActions.setIsSpecialExercises(false));
+        setCanStartExercises(false);
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [
-    currentGameTypes.length,
-    dispatch,
-    canStartExercises,
-    settings,
-    showFrequency,
-  ]);
+  }, [currentGameTypes.length, dispatch, canStartExercises, settings, showFrequency, startTime, isTimerActive]);
 
   const opts = {
     playerVars: {

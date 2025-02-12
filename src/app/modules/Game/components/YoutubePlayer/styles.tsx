@@ -2,13 +2,72 @@ import styled from "styled-components";
 import { COLORS } from "../../constants";
 
 const Container = styled.div`
+  z-index: 2;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 10px;
+  position: relative;
+  margin: 60px auto;
   display: grid;
-  grid-template-columns: 1fr 260px;
-  gap: 10px;
+  grid-template-columns: 1fr 300px;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 24px;
+  font-family: "Roboto", sans-serif;
+
+  &:after,
+  &:before {
+    mix-blend-mode: multiply;
+    filter: none;
+    z-index: -1;
+    content: "";
+    width: calc(100% + 90px);
+    height: calc(100% + 90px);
+    position: absolute;
+    left: -45px;
+    animation: anim-ramka-7 8s ease-in-out infinite;
+  }
+  @keyframes anim-ramka-7 {
+    0%,
+    100% {
+      clip-path: polygon(
+        0 0,
+        calc(100% - (33px)) calc(0% + (33px)),
+        100% 100%,
+        calc(0% + (33px)) calc(100% - (33px))
+      );
+    }
+    50% {
+      clip-path: polygon(
+        calc(0% + (33px)) calc(0% + (33px)),
+        100% 0,
+        calc(100% - (33px)) calc(100% - (33px)),
+        0 100%
+      );
+    }
+  }
+  &:after {
+    animation-delay: -5s;
+    background-color: ${COLORS.lightBlue};
+    clip-path: polygon(
+      0 0,
+      calc(100% - (33px)) calc(0% + (33px)),
+      100% 100%,
+      calc(0% + (33px)) calc(100% - (33px))
+    );
+  }
+  &:before {
+    background-color: ${COLORS.blue};
+    clip-path: polygon(
+      calc(0% + (33px)) calc(0% + (33px)),
+      100% 0,
+      calc(100% - (33px)) calc(100% - (33px)),
+      0 100%
+    );
+  }
+
+  @media only screen and (max-width: 900px) {
+    grid-template-columns: 1fr;
+    margin: 48px auto;
+  }
 `;
 
 const MainContent = styled.div`
@@ -44,7 +103,7 @@ const SideContent = styled.div`
 `;
 
 const VideoList = styled.div`
-  background: ${COLORS.pink};
+  background: transparent;
   border-radius: 8px;
   padding: 8px;
   display: flex;
@@ -63,10 +122,10 @@ const VideoList = styled.div`
 `;
 
 const CategoryList = styled(VideoList)`
-  background: ${COLORS.lightBlue};
+  background: transparent;
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${COLORS.blue};
+    background-color: ${COLORS.gray};
   }
 `;
 
