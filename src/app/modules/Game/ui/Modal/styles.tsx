@@ -29,7 +29,8 @@ const ModalOverlay = styled.div<{ active: boolean }>`
   bottom: 0;
   display: ${({ active }) => (active ? "flex" : "none")};
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 32px;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   ${({ active }) =>
@@ -52,7 +53,7 @@ const ModalContainer = styled.div<{
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
-  max-height: 100vh;
+  max-height: calc(100vh - 64px);
   overflow-y: auto;
   ${({ active }) =>
     active &&
@@ -62,6 +63,7 @@ const ModalContainer = styled.div<{
 
   @media only screen and (max-width: 768px) {
     min-width: 100vw;
+    margin: 0 16px;
   }
 `;
 
