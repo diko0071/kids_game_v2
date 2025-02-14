@@ -46,14 +46,17 @@ const ModalContainer = styled.div<{
 }>`
   background-color: ${({ backgroundColor }) => backgroundColor || COLORS.pink};
   ${({ disabled }) => disabled && "pointer-events: none;"};
-  padding: 20px 10px;
+  padding: 10px 5px;
   border-radius: 16px;
-  min-width: 800px;
+  width: 90vw;
+  max-width: 800px;
+  height: 80vh;
   text-align: center;
+  justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
-  max-height: 100vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   ${({ active }) =>
     active &&
     css`
@@ -61,14 +64,14 @@ const ModalContainer = styled.div<{
     `}
 
   @media only screen and (max-width: 768px) {
-    min-width: 200px;
+    width: 150vw;
+    height: 120vh;
   }
 `;
 
 const ModalTitle = styled.div`
   color: ${COLORS.orange};
   font-size: 24px;
-  padding-bottom: 32px;
 `;
 
 const CloseIcon = styled.div`

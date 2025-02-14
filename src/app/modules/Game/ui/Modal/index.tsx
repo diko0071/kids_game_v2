@@ -39,7 +39,6 @@ const Modal: React.FC<ModalProps> = ({
         backgroundColor={backgroundColor}
         disabled={disabled}
       >
-        {!!title && <S.ModalTitle>{title}</S.ModalTitle>}
         {closable && <S.CloseIcon onClick={hideModal}>×</S.CloseIcon>}
         {children}
       </S.ModalContainer>
