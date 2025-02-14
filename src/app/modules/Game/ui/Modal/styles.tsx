@@ -29,8 +29,7 @@ const ModalOverlay = styled.div<{ active: boolean }>`
   bottom: 0;
   display: ${({ active }) => (active ? "flex" : "none")};
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 32px;
+  align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   ${({ active }) =>
@@ -47,13 +46,13 @@ const ModalContainer = styled.div<{
 }>`
   background-color: ${({ backgroundColor }) => backgroundColor || COLORS.pink};
   ${({ disabled }) => disabled && "pointer-events: none;"};
-  padding: 30px 20px;
+  padding: 20px 10px;
   border-radius: 16px;
-  min-width: 600px;
+  min-width: 800px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
-  max-height: calc(100vh - 64px);
+  max-height: 100vh;
   overflow-y: auto;
   ${({ active }) =>
     active &&
@@ -62,8 +61,7 @@ const ModalContainer = styled.div<{
     `}
 
   @media only screen and (max-width: 768px) {
-    min-width: 100vw;
-    margin: 0 16px;
+    min-width: 200px;
   }
 `;
 
