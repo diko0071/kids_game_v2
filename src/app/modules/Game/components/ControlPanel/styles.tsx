@@ -7,6 +7,8 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 32px;
+  position: relative;
+  z-index: 100;
 
   @media only screen and (max-width: 768px) {
     grid-template-columns: 1fr;

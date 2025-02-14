@@ -62,11 +62,13 @@ const SyllableMatchingGame = ({ onComplete }: SyllableMatchingGameProps) => {
       remainingParts: newRemainingParts,
     });
 
-    gameInfoActions.setSpeakerText({
-      text: selectedWord,
-      lang: LangList.ru,
-    });
-  }, []);
+    dispatch(
+      gameInfoActions.setSpeakerText({
+        text: selectedWord,
+        lang: LangList.ru,
+      })
+    );
+  }, [dispatch]);
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -89,12 +91,14 @@ const SyllableMatchingGame = ({ onComplete }: SyllableMatchingGameProps) => {
 
   const handleRepeatWord = useCallback(() => {
     if (currentWord) {
-      gameInfoActions.setSpeakerText({
-        text: currentWord,
-        lang: LangList.ru,
-      });
+      dispatch(
+        gameInfoActions.setSpeakerText({
+          text: currentWord,
+          lang: LangList.ru,
+        })
+      );
     }
-  }, [currentWord]);
+  }, [currentWord, dispatch]);
 
   return (
     <S.Container>

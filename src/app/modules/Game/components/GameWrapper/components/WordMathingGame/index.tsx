@@ -65,14 +65,16 @@ const WordMatchingGame = ({ onComplete }: WordMatchingGameProps) => {
     (word: string) => {
       if (!isCorrect) {
         handleAnswer(word);
-
-        gameInfoActions.setSpeakerText({
-          text: word,
-          lang: LangList.ru,
-        });
+        
+        dispatch(
+          gameInfoActions.setSpeakerText({
+            text: word,
+            lang: LangList.ru,
+          })
+        );
       }
     },
-    [handleAnswer, isCorrect]
+    [handleAnswer, isCorrect, dispatch]
   );
 
   const initializeGame = useCallback(() => {

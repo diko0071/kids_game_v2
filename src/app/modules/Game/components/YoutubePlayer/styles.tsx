@@ -5,13 +5,14 @@ const Container = styled.div`
   z-index: 2;
   width: 100%;
   position: relative;
-  margin: 60px auto;
+  margin: 10px auto;
   display: grid;
   grid-template-columns: 1fr 300px;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   font-size: 24px;
   font-family: "Roboto", sans-serif;
+  gap: 16px;
 
   &:after,
   &:before {
@@ -64,9 +65,12 @@ const Container = styled.div`
     );
   }
 
+  @media only screen and (max-width: 1200px) {
+    grid-template-columns: 1fr 250px;
+  }
+
   @media only screen and (max-width: 900px) {
-    grid-template-columns: 1fr;
-    margin: 48px auto;
+    grid-template-columns: 1fr 200px;
   }
 `;
 
@@ -95,11 +99,21 @@ const PlayerWrapper = styled.div`
 
 const SideContent = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 8px;
   height: calc(100vh - 20px);
   position: sticky;
   top: 10px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${COLORS.darkPink};
+    border-radius: 4px;
+  }
 `;
 
 const VideoList = styled.div`
@@ -144,6 +158,16 @@ const VideoCard = styled.div<{
   &:hover {
     transform: scale(1.02);
   }
+
+  @media only screen and (max-width: 1200px) {
+    gap: 2px;
+    padding: 3px;
+  }
+
+  @media only screen and (max-width: 900px) {
+    gap: 1px;
+    padding: 2px;
+  }
 `;
 
 const CategoryCard = styled(VideoCard)``;
@@ -153,6 +177,14 @@ const VideoPreview = styled.img`
   aspect-ratio: 16/9;
   object-fit: cover;
   border-radius: 4px;
+
+  @media only screen and (max-width: 1200px) {
+    border-radius: 3px;
+  }
+
+  @media only screen and (max-width: 900px) {
+    border-radius: 2px;
+  }
 `;
 
 const CategoryPreview = styled(VideoPreview)``;
@@ -169,6 +201,15 @@ const VideoName = styled.div<{
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+
+  @media only screen and (max-width: 1200px) {
+    font-size: 10px;
+    -webkit-line-clamp: 1;
+  }
+
+  @media only screen and (max-width: 900px) {
+    font-size: 9px;
+  }
 `;
 
 const CategoryName = styled(VideoName)`
