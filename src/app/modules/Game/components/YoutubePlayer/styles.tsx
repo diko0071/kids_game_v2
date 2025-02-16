@@ -97,6 +97,11 @@ const PlayerWrapper = styled.div`
     width: 100%;
     height: 100%;
   }
+
+  /* Hide fullscreen button */
+  .ytp-fullscreen-button {
+    display: none !important;
+  }
 `;
 
 const SideContent = styled.div`
