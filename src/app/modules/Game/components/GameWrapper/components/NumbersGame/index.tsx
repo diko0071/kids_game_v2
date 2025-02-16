@@ -33,7 +33,7 @@ const NumbersGame = ({ onComplete }: NumbersGameProps) => {
 
   const speakRussianAndEnglishNumber = useCallback(
     (number: number) => {
-      const index = isIceCream ? number : number + 5;
+      const index = isIceCream ? number - 4 : number + 3;
 
       const lang = !!getRandomNumber(0, 1) ? LangList.ru : LangList.en;
       const text = NUMBERS[index][lang];
@@ -48,12 +48,12 @@ const NumbersGame = ({ onComplete }: NumbersGameProps) => {
   );
 
   const generateNewQuestion = useCallback(() => {
-    const count = Math.floor(Math.random() * 4) + 1;
+    const count = Math.floor(Math.random() * 7) + 4;
     setDessertCount(count);
 
     const newOptions = [count];
     while (newOptions.length < 3) {
-      const option = Math.floor(Math.random() * 4) + 1;
+      const option = Math.floor(Math.random() * 7) + 4;
       if (!newOptions.includes(option)) {
         newOptions.push(option);
       }

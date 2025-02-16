@@ -29,14 +29,18 @@ export const CakeSvg = ({ colors }: { colors: string[] }) => (
 );
 
 export const NUMBERS = [
-  { [LangList.ru]: "Ноль мороженых", [LangList.en]: "Zero ice creams" },
-  { [LangList.ru]: "Одно мороженое", [LangList.en]: "One ice cream" },
-  { [LangList.ru]: "Два мороженых", [LangList.en]: "Two ice creams" },
-  { [LangList.ru]: "Три мороженых", [LangList.en]: "Three ice creams" },
   { [LangList.ru]: "Четыре мороженых", [LangList.en]: "Four ice creams" },
-  { [LangList.ru]: "Ноль тортиков", [LangList.en]: "Zero cakes" },
-  { [LangList.ru]: "Один тортик", [LangList.en]: "One cake" },
-  { [LangList.ru]: "Два тортика", [LangList.en]: "Two cakes" },
-  { [LangList.ru]: "Три тортика", [LangList.en]: "Three cakes" },
+  { [LangList.ru]: "Пять мороженых", [LangList.en]: "Five ice creams" },
+  { [LangList.ru]: "Шесть мороженых", [LangList.en]: "Six ice creams" },
+  { [LangList.ru]: "Семь мороженых", [LangList.en]: "Seven ice creams" },
+  { [LangList.ru]: "Восемь мороженых", [LangList.en]: "Eight ice creams" },
+  { [LangList.ru]: "Девять мороженых", [LangList.en]: "Nine ice creams" },
+  { [LangList.ru]: "Десять мороженых", [LangList.en]: "Ten ice creams" },
   { [LangList.ru]: "Четыре тортика", [LangList.en]: "Four cakes" },
+  { [LangList.ru]: "Пять тортиков", [LangList.en]: "Five cakes" },
+  { [LangList.ru]: "Шесть тортиков", [LangList.en]: "Six cakes" },
+  { [LangList.ru]: "Семь тортиков", [LangList.en]: "Seven cakes" },
+  { [LangList.ru]: "Восемь тортиков", [LangList.en]: "Eight cakes" },
+  { [LangList.ru]: "Девять тортиков", [LangList.en]: "Nine cakes" },
+  { [LangList.ru]: "Десять тортиков", [LangList.en]: "Ten cakes" }
 ];
