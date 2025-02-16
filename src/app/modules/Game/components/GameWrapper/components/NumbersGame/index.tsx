@@ -92,15 +92,31 @@ const NumbersGame = ({ onComplete }: NumbersGameProps) => {
       <S.MessageWrapper>
         {message && <S.Message isCorrect={!!isCorrect}>{message}</S.Message>}
       </S.MessageWrapper>
-      <div className="flex justify-center gap-12 mb-12 mt-12">
-        {Array.from({ length: dessertCount }).map((_, index) => (
-          <DessertComponent
-            colors={[
-              dessertColors[index % dessertColors.length],
-              dessertColors[(index + 1) % dessertColors.length],
-            ]}
-          />
-        ))}
+      <div className="flex flex-col gap-8 mb-12 mt-12">
+        <div className="flex justify-center gap-12">
+          {Array.from({ length: Math.min(5, dessertCount) }).map((_, index) => (
+            <DessertComponent
+              key={`row1-${index}`}
+              colors={[
+                dessertColors[index % dessertColors.length],
+                dessertColors[(index + 1) % dessertColors.length],
+              ]}
+            />
+          ))}
+        </div>
+        {dessertCount > 5 && (
+          <div className="flex justify-center gap-12">
+            {Array.from({ length: dessertCount - 5 }).map((_, index) => (
+              <DessertComponent
+                key={`row2-${index}`}
+                colors={[
+                  dessertColors[(index + 5) % dessertColors.length],
+                  dessertColors[(index + 6) % dessertColors.length],
+                ]}
+              />
+            ))}
+          </div>
+        )}
       </div>
       <S.Buttons>
         {options.map((option) => (
