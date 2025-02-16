@@ -81,6 +81,14 @@ export interface CategoryVideos {
 // Video library
 export const VIDEO_LIBRARY: CategoryVideos[] = [
   {
+    name: 'Английский для малышей',
+    videos: [
+      { title: 'Английский язык для малышей - Мяу-Мяу - сборник серий - 1- 5 серии - учим английский', url: 'https://www.youtube.com/watch?v=C6NrFzJwj_I', language: 'ru' },
+      { title: 'Английский язык для малышей - Мяу-Мяу - сборник серий - 6 - 10 серии - учим английский', url: 'https://www.youtube.com/watch?v=Y_zJqo7Zepw', language: 'ru' },
+      { title: 'Gogo Loves English', url: 'https://www.youtube.com/watch?v=l0YKZzmP2e8', language: 'en' }
+    ]
+  },
+  {
     name: 'Избранные танцы',
     videos: [
       { title: 'Zombie Dance with New DB Heroes + MORE D Billions Kids Songs', url: 'https://www.youtube.com/watch?v=Avr4Dz0tKYE', language: 'en' },
@@ -449,6 +457,15 @@ export const VIDEOS = VIDEO_LIBRARY.flatMap(category =>
 );
 
 export const VIDEO_CATEGORIES = [
+  {
+    id: "english_for_kids",
+    name: "Английский для малышей",
+    image: `https://i.ytimg.com/vi/${VIDEO_LIBRARY.find(c => c.name === 'Английский для малышей')?.videos[0]?.url.split('v=')[1]}/maxresdefault.jpg`,
+    videos: VIDEO_LIBRARY.find(c => c.name === 'Английский для малышей')?.videos.map(v => ({
+      id: v.url.split('v=')[1],
+      name: v.title
+    })) || []
+  },
   {
     id: "favorite_dances",
     name: "Избранные танцы",
