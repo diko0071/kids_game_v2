@@ -10,39 +10,11 @@ import { gameInfoActions, gameInfoSelector } from "../../services/gameInfo";
 import { GameList, VIDEO_CATEGORIES, VIDEOS } from "../../constants";
 import { getRandomGames } from "../../utils/getRandomGames";
 
-const setFullscreen = (playerRef: any) => {
-  const playerElement = playerRef.current.getIframe();
-  if (playerElement.requestFullscreen) {
-    playerElement.requestFullscreen();
-  } else if (playerElement.mozRequestFullScreen) {
-    playerElement.mozRequestFullScreen();
-  } else if (playerElement.webkitRequestFullscreen) {
-    playerElement.webkitRequestFullscreen();
-  } else if (playerElement.msRequestFullscreen) {
-    playerElement.msRequestFullscreen();
-  }
-};
-
-const exitFullscreen = () => {
-  if (!document.fullscreenElement) return;
-  const screen: any = document;
-  if (screen.exitFullscreen) {
-    screen.exitFullscreen();
-  } else if (screen.mozCancelFullScreen) {
-    screen.mozCancelFullScreen();
-  } else if (screen.webkitExitFullscreen) {
-    screen.webkitExitFullscreen();
-  } else if (screen.msExitFullscreen) {
-    screen.msExitFullscreen();
-  }
-};
-
 const YoutubePlayer: React.FC = () => {
   const [canStartExercises, setCanStartExercises] = useState<boolean>(true);
-  const [wasInFullscreen, setWasInFullscreen] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>("favorite_dances");
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [isTimerActive, setIsTimerActive] = useState<boolean>(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>("favorite_dances");
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -88,21 +60,16 @@ const YoutubePlayer: React.FC = () => {
 
     if (currentGameTypes.length > 0) {
       playerRef.current.pauseVideo?.();
-      setWasInFullscreen(!!document.fullscreenElement);
-      exitFullscreen();
       setIsTimerActive(false);
     } else {
       playerRef.current.playVideo?.();
-      if (!isSpecialExercises && wasInFullscreen) {
-        setFullscreen(playerRef);
-      }
       setTimeout(() => {
         setCanStartExercises(true);
         setStartTime(Date.now());
         setIsTimerActive(true);
       }, 5000);
     }
-  }, [currentGameTypes, isSpecialExercises, wasInFullscreen]);
+  }, [currentGameTypes]);
 
   useEffect(() => {
     if (!isTimerActive) return;
@@ -137,7 +104,7 @@ const YoutubePlayer: React.FC = () => {
       controls: showYoutubeControls ? 1 : 0,
       modestbranding: 1,
       disablekb: 1,
-      fs: 1,
+      fs: 0,
       rel: 0,
     },
   };
@@ -171,6 +138,7 @@ const YoutubePlayer: React.FC = () => {
                 onReady={handlePlayerReady}
                 onError={handlePlayerError}
               />
+              <S.TitleOverlay />
               <S.RightControlsOverlay />
               <S.RecommendationsOverlay />
             </>
@@ -183,6 +151,7 @@ const YoutubePlayer: React.FC = () => {
                 onReady={handlePlayerReady}
                 onError={handlePlayerError}
               />
+              <S.TitleOverlay />
               <S.RightControlsOverlay />
               <S.RecommendationsOverlay />
             </>
