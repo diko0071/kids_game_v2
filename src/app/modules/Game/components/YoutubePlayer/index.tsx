@@ -40,7 +40,7 @@ const exitFullscreen = () => {
 const YoutubePlayer: React.FC = () => {
   const [canStartExercises, setCanStartExercises] = useState<boolean>(true);
   const [wasInFullscreen, setWasInFullscreen] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("favorite_dances");
   const [startTime, setStartTime] = useState<number>(Date.now());
   const [isTimerActive, setIsTimerActive] = useState<boolean>(true);
   const dispatch = useAppDispatch();
@@ -192,34 +192,41 @@ const YoutubePlayer: React.FC = () => {
 
       <S.SideContent>
         <S.VideoList>
-          {(selectedCategory 
-            ? VIDEO_CATEGORIES.find(cat => cat.id === selectedCategory)?.videos || VIDEOS.slice(0, 5)
-            : VIDEOS.slice(0, 5)
-          ).map(({ id, name }, index) => {
-            const previewSrc = `https://img.youtube.com/vi/${id}/0.jpg`;
-            const active = videoId === id;
+          {(() => {
+            const selectedCategoryData = VIDEO_CATEGORIES.find(cat => cat.id === selectedCategory);
+            if (!selectedCategoryData) return null;
+            
+            // Filter out duplicates using Set
+            const uniqueVideos = selectedCategoryData.videos.reduce((acc, video) => {
+              if (!acc.some(v => v.id === video.id)) {
+                acc.push(video);
+              }
+              return acc;
+            }, [] as Array<{id: string, name: string}>);
+            
+            return uniqueVideos.map(({ id, name }) => {
+              const previewSrc = `https://img.youtube.com/vi/${id}/0.jpg`;
+              const active = videoId === id;
 
-            return (
-              <S.VideoCard
-                ref={(el) => {
-                  videoRefs.current[index] = el;
-                }}
-                active={active}
-                key={`card_${id}`}
-                onClick={() => {
-                  if (!active) {
-                    const newParams = new URLSearchParams(searchParams.toString());
-                    newParams.set("videoId", id);
-                    router.replace(`?${newParams.toString()}`);
-                    dispatch(gameInfoActions.setVideoId({ videoId: id }));
-                  }
-                }}
-              >
-                <S.VideoPreview src={previewSrc} alt={name} />
-                <S.VideoName active={active}>{name}</S.VideoName>
-              </S.VideoCard>
-            );
-          })}
+              return (
+                <S.VideoCard
+                  key={`${selectedCategory}_${id}`}
+                  active={active}
+                  onClick={() => {
+                    if (!active) {
+                      dispatch(gameInfoActions.setVideoId({ videoId: id }));
+                      const newParams = new URLSearchParams(searchParams.toString());
+                      newParams.set("videoId", id);
+                      router.replace(`?${newParams.toString()}`);
+                    }
+                  }}
+                >
+                  <S.VideoPreview src={previewSrc} alt={name} />
+                  <S.VideoName active={active}>{name}</S.VideoName>
+                </S.VideoCard>
+              );
+            });
+          })()}
         </S.VideoList>
 
         <S.CategoryList>
@@ -227,9 +234,7 @@ const YoutubePlayer: React.FC = () => {
             <S.CategoryCard
               key={`category_${category.id}`}
               active={selectedCategory === category.id}
-              onClick={() => setSelectedCategory(
-                selectedCategory === category.id ? null : category.id
-              )}
+              onClick={() => setSelectedCategory(category.id)}
             >
               <S.CategoryPreview src={category.image} alt={category.name} />
               <S.CategoryName active={selectedCategory === category.id}>

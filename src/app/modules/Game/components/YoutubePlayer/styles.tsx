@@ -6,6 +6,7 @@ const Container = styled.div`
   width: 100%;
   position: relative;
   margin: 10px auto;
+  margin-bottom: 70px;
   display: grid;
   grid-template-columns: 1fr 300px;
   align-items: flex-start;
@@ -99,12 +100,14 @@ const PlayerWrapper = styled.div`
 
 const SideContent = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
-  height: calc(100vh - 20px);
+  height: auto;
+  max-height: calc(100vh - 200px);
   position: sticky;
   top: 10px;
   overflow-y: auto;
+  margin-bottom: 16px;
 
   &::-webkit-scrollbar {
     width: 4px;
@@ -117,13 +120,23 @@ const SideContent = styled.div`
 `;
 
 const VideoList = styled.div`
-  background: transparent;
+  background: ${COLORS.lightBlue};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
   overflow-y: auto;
+  max-height: calc(100vh - 220px);
+
+  @media only screen and (max-width: 1200px) {
+    max-height: calc(100vh - 220px);
+  }
+
+  @media only screen and (max-width: 900px) {
+    max-height: calc(100vh - 220px);
+  }
 
   &::-webkit-scrollbar {
     width: 4px;
@@ -136,10 +149,11 @@ const VideoList = styled.div`
 `;
 
 const CategoryList = styled(VideoList)`
-  background: transparent;
+  background: ${COLORS.pink};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${COLORS.gray};
+    background-color: ${COLORS.blue};
   }
 `;
 
@@ -150,23 +164,26 @@ const VideoCard = styled.div<{
   transition: 0.2s all;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 4px;
-  border-radius: 6px;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 4px;
   background: ${COLORS.white};
-
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
   &:hover {
     transform: scale(1.02);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   }
 
   @media only screen and (max-width: 1200px) {
-    gap: 2px;
-    padding: 3px;
+    gap: 1px;
+    padding: 2px;
   }
 
   @media only screen and (max-width: 900px) {
     gap: 1px;
-    padding: 2px;
+    padding: 1px;
   }
 `;
 
@@ -176,10 +193,10 @@ const VideoPreview = styled.img`
   width: 100%;
   aspect-ratio: 16/9;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 3px;
 
   @media only screen and (max-width: 1200px) {
-    border-radius: 3px;
+    border-radius: 2px;
   }
 
   @media only screen and (max-width: 900px) {
@@ -193,8 +210,8 @@ const VideoName = styled.div<{
   active: boolean;
 }>`
   color: ${({ active }) => (active ? COLORS.darkPink : COLORS.gray)};
-  font-size: 11px;
-  line-height: 1.2;
+  font-size: 9px;
+  line-height: 1.1;
   font-weight: ${({ active }) => (active ? "bold" : "normal")};
   overflow: hidden;
   text-overflow: ellipsis;
@@ -203,12 +220,12 @@ const VideoName = styled.div<{
   -webkit-box-orient: vertical;
 
   @media only screen and (max-width: 1200px) {
-    font-size: 10px;
-    -webkit-line-clamp: 1;
+    font-size: 8px;
+    -webkit-line-clamp: 2;
   }
 
   @media only screen and (max-width: 900px) {
-    font-size: 9px;
+    font-size: 7px;
   }
 `;
 
