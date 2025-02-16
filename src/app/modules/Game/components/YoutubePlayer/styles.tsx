@@ -264,6 +264,16 @@ const RecommendationsOverlay = styled.div`
   }
 `;
 
+const TitleOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: rgba(0, 0, 0, 0);
+  z-index: 10;
+`;
+
 const Footer = styled.div`
   position: fixed;
   bottom: 10px;
@@ -303,5 +313,6 @@ export default {
   CategoryName,
   RightControlsOverlay,
   RecommendationsOverlay,
+  TitleOverlay,
   Footer,
 };

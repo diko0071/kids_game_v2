@@ -171,6 +171,7 @@ const YoutubePlayer: React.FC = () => {
                 onReady={handlePlayerReady}
                 onError={handlePlayerError}
               />
+              <S.TitleOverlay />
               <S.RightControlsOverlay />
               <S.RecommendationsOverlay />
             </>
@@ -183,6 +184,7 @@ const YoutubePlayer: React.FC = () => {
                 onReady={handlePlayerReady}
                 onError={handlePlayerError}
               />
+              <S.TitleOverlay />
               <S.RightControlsOverlay />
               <S.RecommendationsOverlay />
             </>
