@@ -88,6 +88,7 @@ const PlayerWrapper = styled.div`
   overflow: hidden;
   border-radius: 8px;
   background: ${COLORS.white};
+  margin-bottom: 0;
 
   iframe {
     position: absolute;
@@ -102,8 +103,7 @@ const SideContent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  height: auto;
-  max-height: calc(100vh - 200px);
+  height: 56.25vh;
   position: sticky;
   top: 10px;
   overflow-y: auto;
