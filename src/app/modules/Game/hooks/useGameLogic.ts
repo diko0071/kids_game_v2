@@ -99,3 +99,5 @@ export function useGameLogic<T>(
 
   return { isCorrect, message, handleAnswer, nextQuestion };
 }
+
+
