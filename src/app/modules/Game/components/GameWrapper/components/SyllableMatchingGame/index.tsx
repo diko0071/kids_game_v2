@@ -16,9 +16,7 @@ interface SyllableMatchingGameProps {
 }
 
 const SyllableMatchingGame = ({ onComplete }: SyllableMatchingGameProps) => {
-  const [currentWord, setCurrentWord] = useState<typeof FAMILY_WORDS[0] | null>(
-    null
-  );
+  const [currentWord, setCurrentWord] = useState<(typeof FAMILY_WORDS)[0] | null>(null);
   const dispatch = useAppDispatch();
   const [options, setOptions] = useState<{
     firstSyllables: string[];
@@ -33,22 +31,44 @@ const SyllableMatchingGame = ({ onComplete }: SyllableMatchingGameProps) => {
   const isInitialMount = useRef(true);
 
   const checkAnswer = useCallback(
-    (answer: string) => currentWord === answer,
+    (answer: string) => currentWord?.ru === answer,
     [currentWord]
   );
+
+  const speakRussianAndEnglishWord = useCallback(
+    (word: string) => {
+      const wordObj = FAMILY_WORDS.find(w => w.ru === word);
+      if (!wordObj) return;
+      
+      dispatch(
+        gameInfoActions.setSpeakerText({
+          text: `${wordObj.ru}|${wordObj.en}`,
+          lang: LangList.ru,
+        })
+      );
+    },
+    [dispatch]
+  );
+
+  const getWordText = useCallback((word: string) => {
+    const wordObj = FAMILY_WORDS.find(w => w.ru === word);
+    return wordObj ? `${wordObj.ru}|${wordObj.en}` : '';
+  }, []);
 
   const { isCorrect, message, handleAnswer } = useGameLogic(
     () => {},
     checkAnswer,
     onComplete,
-    () => {}
+    () => {},
+    LangList.ru,
+    currentWord ? getWordText(currentWord.ru) : ''
   );
 
   const initializeGame = useCallback(() => {
     const randomIndex = getRandomNumber(0, FAMILY_WORDS.length - 1);
     const selectedWord = FAMILY_WORDS[randomIndex];
 
-    const syllables = FAMILY_WORDS.map((word) => splitIntoSyllables(word));
+    const syllables = FAMILY_WORDS.map((word) => splitIntoSyllables(word.ru));
 
     let newFirstSyllables = syllables.map((parts) => parts[0]);
     let newRemainingParts = syllables.map((parts) => parts.slice(1).join(""));
@@ -62,13 +82,8 @@ const SyllableMatchingGame = ({ onComplete }: SyllableMatchingGameProps) => {
       remainingParts: newRemainingParts,
     });
 
-    dispatch(
-      gameInfoActions.setSpeakerText({
-        text: selectedWord,
-        lang: LangList.ru,
-      })
-    );
-  }, [dispatch]);
+    speakRussianAndEnglishWord(selectedWord.ru);
+  }, [dispatch, speakRussianAndEnglishWord]);
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -91,14 +106,9 @@ const SyllableMatchingGame = ({ onComplete }: SyllableMatchingGameProps) => {
 
   const handleRepeatWord = useCallback(() => {
     if (currentWord) {
-      dispatch(
-        gameInfoActions.setSpeakerText({
-          text: currentWord,
-          lang: LangList.ru,
-        })
-      );
+      speakRussianAndEnglishWord(currentWord.ru);
     }
-  }, [currentWord, dispatch]);
+  }, [currentWord, speakRussianAndEnglishWord]);
 
   return (
     <S.Container>
@@ -108,7 +118,7 @@ const SyllableMatchingGame = ({ onComplete }: SyllableMatchingGameProps) => {
       <S.SVGWrapper>
         <Button
           onClick={handleRepeatWord}
-          text={currentWord || ""}
+          text={currentWord?.ru || ""}
           backgroundColor={COLORS.darkPink}
           textColor={COLORS.white}
           isHuge
@@ -126,7 +136,7 @@ const SyllableMatchingGame = ({ onComplete }: SyllableMatchingGameProps) => {
               isMedium
               isSelected={option === selectedFirstSyllable}
               onClick={() => {
-                if (currentWord?.includes(option)) {
+                if (currentWord?.ru.includes(option)) {
                   setSelectedFirstSyllable(option);
                   dispatch(
                     gameInfoActions.setSpeakerText({
@@ -151,7 +161,7 @@ const SyllableMatchingGame = ({ onComplete }: SyllableMatchingGameProps) => {
               isMedium
               isSelected={option === selectedRemainingPart}
               onClick={() => {
-                if (currentWord?.includes(option)) {
+                if (currentWord?.ru.includes(option)) {
                   setSelectedRemainingPart(option);
                   dispatch(
                     gameInfoActions.setSpeakerText({

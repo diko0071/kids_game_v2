@@ -12,15 +12,17 @@ import {
   RUSSIAN_WORDS,
   LETTER_COLORS,
 } from "./constants";
+import { LangList } from "../../../../constants";
+import { useDispatch } from 'react-redux';
 
 interface RussianAlphabetGameProps {
   onComplete: () => void;
 }
 
 const RussianAlphabetGame = ({ onComplete }: RussianAlphabetGameProps) => {
-  const [currentLetter, setCurrentLetter] = useState("");
+  const [currentLetter, setCurrentLetter] = useState(RUSSIAN_LETTERS[0]);
   const [options, setOptions] = useState<string[]>([]);
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   const generateNewQuestion = useCallback(() => {
     const letter =
@@ -43,14 +45,21 @@ const RussianAlphabetGame = ({ onComplete }: RussianAlphabetGameProps) => {
     [currentLetter]
   );
 
+  const getLetterText = useCallback((letter: string) => {
+    const words = RUSSIAN_WORDS[letter as keyof typeof RUSSIAN_WORDS];
+    const randomWord = words[Math.floor(Math.random() * words.length)];
+    return `${letter}. ${randomWord.russian}|${randomWord.english}`;
+  }, []);
+
   const speakRussianAndEnglishWord = useCallback(
     (letter: string) => {
       const words = RUSSIAN_WORDS[letter as keyof typeof RUSSIAN_WORDS];
       const randomWord = words[Math.floor(Math.random() * words.length)];
-
+      
       dispatch(
         gameInfoActions.setSpeakerText({
-          text: `${randomWord.russian}, ${randomWord.english}`,
+          text: `${letter}. ${randomWord.russian}|${randomWord.english}`,
+          lang: LangList.ru,
         })
       );
     },
@@ -61,7 +70,9 @@ const RussianAlphabetGame = ({ onComplete }: RussianAlphabetGameProps) => {
     generateNewQuestion,
     checkAnswer,
     onComplete,
-    () => {}
+    () => {},
+    LangList.ru,
+    getLetterText(currentLetter)
   );
 
   useEffect(() => {

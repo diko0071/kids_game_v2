@@ -52,23 +52,35 @@ const GhostGame = ({ onComplete }: GhostGameProps) => {
 
   const announceColor = useCallback(
     (color: { [LangList.ru]: string; [LangList.en]: string }) => {
-      const lang = !!getRandomNumber(0, 1) ? LangList.ru : LangList.en;
-      const text = color[lang];
+      const russianText = color[LangList.ru];
+      const englishText = color[LangList.en];
+      
       dispatch(
         gameInfoActions.setSpeakerText({
-          text,
-          lang,
+          text: `${russianText}|${englishText}`,
+          lang: LangList.ru,
         })
       );
     },
     [dispatch]
   );
 
+  const getColorText = useCallback(
+    (color: { [LangList.ru]: string; [LangList.en]: string }) => {
+      const russianText = color[LangList.ru];
+      const englishText = color[LangList.en];
+      return `${russianText}|${englishText}`;
+    },
+    []
+  );
+
   const { isCorrect, message, handleAnswer } = useGameLogic(
     generateNewQuestion,
     checkAnswer,
     onComplete,
-    () => {}
+    () => {},
+    LangList.ru,
+    getColorText(currentColor)
   );
 
   const handleColorClick = useCallback(

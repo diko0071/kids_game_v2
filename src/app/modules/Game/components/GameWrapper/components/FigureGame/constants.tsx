@@ -6,28 +6,24 @@ export enum FigureNames {
   circle = "circle",
   oval = "oval",
   triangle = "triangle",
-  rectangle = "rectangle",
+  rectangle = "rectangle"
 }
+
+export const FIGURE_WORDS = {
+  [FigureNames.square]: { ru: "Квадрат", en: "Square" },
+  [FigureNames.circle]: { ru: "Круг", en: "Circle" },
+  [FigureNames.oval]: { ru: "Овал", en: "Oval" },
+  [FigureNames.triangle]: { ru: "Треугольник", en: "Triangle" },
+  [FigureNames.rectangle]: { ru: "Прямоугольник", en: "Rectangle" },
+};
 
 export const FIGURES = [
   FigureNames.square,
   FigureNames.circle,
   FigureNames.oval,
   FigureNames.triangle,
-  FigureNames.rectangle,
+  FigureNames.rectangle
 ];
-
-export const FIGURE_WORDS = {
-  [FigureNames.square]: [{ [LangList.ru]: "Квадрат", [LangList.en]: "Square" }],
-  [FigureNames.circle]: [{ [LangList.ru]: "Круг", [LangList.en]: "Circle" }],
-  [FigureNames.oval]: [{ [LangList.ru]: "Овал", [LangList.en]: "Oval" }],
-  [FigureNames.triangle]: [
-    { [LangList.ru]: "Треугольник", [LangList.en]: "Triangle" },
-  ],
-  [FigureNames.rectangle]: [
-    { [LangList.ru]: "Прямоугольник", [LangList.en]: "Rectangle" },
-  ],
-};
 
 export const IMAGES = {
   [FigureNames.square]: (

@@ -33,14 +33,14 @@ const NumbersGame = ({ onComplete }: NumbersGameProps) => {
 
   const speakRussianAndEnglishNumber = useCallback(
     (number: number) => {
-      const index = isIceCream ? number - 4 : number + 3;
-
-      const lang = !!getRandomNumber(0, 1) ? LangList.ru : LangList.en;
-      const text = NUMBERS[index][lang];
+      const index = isIceCream ? number : number + 5;
+      const russianText = NUMBERS[index][LangList.ru];
+      const englishText = NUMBERS[index][LangList.en];
+      
       dispatch(
         gameInfoActions.setSpeakerText({
-          text,
-          lang,
+          text: `${russianText}|${englishText}`,
+          lang: LangList.ru,
         })
       );
     },
@@ -48,12 +48,12 @@ const NumbersGame = ({ onComplete }: NumbersGameProps) => {
   );
 
   const generateNewQuestion = useCallback(() => {
-    const count = Math.floor(Math.random() * 7) + 4;
+    const count = Math.floor(Math.random() * 4) + 1;
     setDessertCount(count);
 
     const newOptions = [count];
     while (newOptions.length < 3) {
-      const option = Math.floor(Math.random() * 7) + 4;
+      const option = Math.floor(Math.random() * 4) + 1;
       if (!newOptions.includes(option)) {
         newOptions.push(option);
       }
@@ -66,11 +66,20 @@ const NumbersGame = ({ onComplete }: NumbersGameProps) => {
     [dessertCount]
   );
 
+  const getNumberText = useCallback((number: number) => {
+    const index = isIceCream ? number : number + 5;
+    const russianText = NUMBERS[index][LangList.ru];
+    const englishText = NUMBERS[index][LangList.en];
+    return `${russianText}|${englishText}`;
+  }, [isIceCream]);
+
   const { isCorrect, message, handleAnswer } = useGameLogic(
     generateNewQuestion,
     checkAnswer,
     onComplete,
-    () => {}
+    () => generateNewQuestion(),
+    LangList.ru,
+    getNumberText(dessertCount)
   );
 
   useEffect(() => {
@@ -78,10 +87,7 @@ const NumbersGame = ({ onComplete }: NumbersGameProps) => {
   }, [generateNewQuestion]);
 
   const handleOptionClick = (option: number) => {
-    if (!isCorrect) {
-      speakRussianAndEnglishNumber(option);
-      handleAnswer(option);
-    }
+    handleAnswer(option);
   };
 
   const DessertComponent = isIceCream ? IceCreamSvg : CakeSvg;
@@ -92,31 +98,15 @@ const NumbersGame = ({ onComplete }: NumbersGameProps) => {
       <S.MessageWrapper>
         {message && <S.Message isCorrect={!!isCorrect}>{message}</S.Message>}
       </S.MessageWrapper>
-      <div className="flex flex-col gap-8 mb-12 mt-12">
-        <div className="flex justify-center gap-12">
-          {Array.from({ length: Math.min(5, dessertCount) }).map((_, index) => (
-            <DessertComponent
-              key={`row1-${index}`}
-              colors={[
-                dessertColors[index % dessertColors.length],
-                dessertColors[(index + 1) % dessertColors.length],
-              ]}
-            />
-          ))}
-        </div>
-        {dessertCount > 5 && (
-          <div className="flex justify-center gap-12">
-            {Array.from({ length: dessertCount - 5 }).map((_, index) => (
-              <DessertComponent
-                key={`row2-${index}`}
-                colors={[
-                  dessertColors[(index + 5) % dessertColors.length],
-                  dessertColors[(index + 6) % dessertColors.length],
-                ]}
-              />
-            ))}
-          </div>
-        )}
+      <div className="flex justify-center gap-12 mb-12 mt-12">
+        {Array.from({ length: dessertCount }).map((_, index) => (
+          <DessertComponent
+            colors={[
+              dessertColors[index % dessertColors.length],
+              dessertColors[(index + 1) % dessertColors.length],
+            ]}
+          />
+        ))}
       </div>
       <S.Buttons>
         {options.map((option) => (

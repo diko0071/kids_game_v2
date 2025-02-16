@@ -35,7 +35,8 @@ export function useGameLogic<T>(
   checkAnswer: (answer: T) => boolean,
   onSuccess: () => void,
   onFailure: () => void,
-  language: LangList = LangList.ru
+  language: LangList = LangList.ru,
+  text: string = ""
 ) {
   const dispatch = useAppDispatch();
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
@@ -58,12 +59,13 @@ export function useGameLogic<T>(
         setIsCorrect(true);
         const praise = getRandomPraise();
         setMessage(praise);
+        
         await playHappySound();
-        await sleep(1000);
+        await sleep(500);
 
         dispatch(
           gameInfoActions.setSpeakerText({
-            text: praise,
+            text: `${praise}|${text}`,
             lang: language,
           })
         );
@@ -74,12 +76,11 @@ export function useGameLogic<T>(
         const tryAgainMessage =
           language === "ru-RU" ? "Попробуй ещё раз!" : "Try again!";
         setMessage(tryAgainMessage);
+        
         await playSadSound();
-        await sleep(1000);
-
         dispatch(
           gameInfoActions.setSpeakerText({
-            text: tryAgainMessage,
+            text: `${tryAgainMessage}|${text}`,
             lang: language,
           })
         );
@@ -87,16 +88,7 @@ export function useGameLogic<T>(
         onFailure();
       }
     },
-    [
-      checkAnswer,
-      getRandomPraise,
-      playHappySound,
-      dispatch,
-      language,
-      onSuccess,
-      playSadSound,
-      onFailure,
-    ]
+    [checkAnswer, playHappySound, playSadSound, dispatch, language, onSuccess, onFailure]
   );
 
   const nextQuestion = useCallback(() => {
