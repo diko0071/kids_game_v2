@@ -22,59 +22,27 @@ const WordMatchingGame = ({ onComplete }: WordMatchingGameProps) => {
   const isInitialMount = useRef(true);
   const speakTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const speakWord = useCallback(
-    async (word: typeof FAMILY_WORDS[0]) => {
+  const speakRussianAndEnglishWord = useCallback(
+    (word: typeof FAMILY_WORDS[0]) => {
       if (!word) return;
-
+      
       dispatch(
         gameInfoActions.setSpeakerText({
-          text: word.russian,
+          text: `${word.russian}|${word.english}`,
           lang: LangList.ru,
         })
       );
-
-      if (speakTimeoutRef.current) {
-        clearTimeout(speakTimeoutRef.current);
-      }
-
-      speakTimeoutRef.current = setTimeout(async () => {
-        dispatch(
-          gameInfoActions.setSpeakerText({
-            text: word.english,
-            lang: LangList.en,
-          })
-        );
-      }, 500);
     },
     [dispatch]
   );
 
+  const getWordText = useCallback((word: typeof FAMILY_WORDS[0]) => {
+    return word ? `${word.russian}|${word.english}` : '';
+  }, []);
+
   const checkAnswer = useCallback(
     (answer: string) => currentWord?.russian === answer,
     [currentWord]
-  );
-
-  const { isCorrect, message, handleAnswer } = useGameLogic(
-    () => {},
-    checkAnswer,
-    onComplete,
-    () => {}
-  );
-
-  const handleWordClick = useCallback(
-    (word: string) => {
-      if (!isCorrect) {
-        handleAnswer(word);
-        
-        dispatch(
-          gameInfoActions.setSpeakerText({
-            text: word,
-            lang: LangList.ru,
-          })
-        );
-      }
-    },
-    [handleAnswer, isCorrect, dispatch]
   );
 
   const initializeGame = useCallback(() => {
@@ -93,8 +61,8 @@ const WordMatchingGame = ({ onComplete }: WordMatchingGameProps) => {
 
     setCurrentWord(selectedWord);
     setOptions(allOptions);
-    speakWord(selectedWord);
-  }, [speakWord]);
+    speakRussianAndEnglishWord(selectedWord);
+  }, [speakRussianAndEnglishWord]);
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -113,11 +81,33 @@ const WordMatchingGame = ({ onComplete }: WordMatchingGameProps) => {
     []
   );
 
+  const { isCorrect, message, handleAnswer } = useGameLogic(
+    initializeGame,
+    checkAnswer,
+    onComplete,
+    () => {},
+    LangList.ru,
+    currentWord ? getWordText(currentWord) : ''
+  );
+
+  const handleWordClick = useCallback(
+    (word: string) => {
+      if (!isCorrect) {
+        const wordObj = FAMILY_WORDS.find(w => w.russian === word);
+        if (wordObj) {
+          speakRussianAndEnglishWord(wordObj);
+        }
+        handleAnswer(word);
+      }
+    },
+    [handleAnswer, isCorrect, speakRussianAndEnglishWord]
+  );
+
   const handleRepeatWord = useCallback(() => {
     if (currentWord) {
-      speakWord(currentWord);
+      speakRussianAndEnglishWord(currentWord);
     }
-  }, [currentWord, speakWord]);
+  }, [currentWord, speakRussianAndEnglishWord]);
 
   return (
     <S.Container>

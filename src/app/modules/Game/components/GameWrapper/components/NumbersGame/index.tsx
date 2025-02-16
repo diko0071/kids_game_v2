@@ -34,13 +34,13 @@ const NumbersGame = ({ onComplete }: NumbersGameProps) => {
   const speakRussianAndEnglishNumber = useCallback(
     (number: number) => {
       const index = isIceCream ? number : number + 5;
-
-      const lang = !!getRandomNumber(0, 1) ? LangList.ru : LangList.en;
-      const text = NUMBERS[index][lang];
+      const russianText = NUMBERS[index][LangList.ru];
+      const englishText = NUMBERS[index][LangList.en];
+      
       dispatch(
         gameInfoActions.setSpeakerText({
-          text,
-          lang,
+          text: `${russianText}|${englishText}`,
+          lang: LangList.ru,
         })
       );
     },
@@ -66,11 +66,20 @@ const NumbersGame = ({ onComplete }: NumbersGameProps) => {
     [dessertCount]
   );
 
+  const getNumberText = useCallback((number: number) => {
+    const index = isIceCream ? number : number + 5;
+    const russianText = NUMBERS[index][LangList.ru];
+    const englishText = NUMBERS[index][LangList.en];
+    return `${russianText}|${englishText}`;
+  }, [isIceCream]);
+
   const { isCorrect, message, handleAnswer } = useGameLogic(
     generateNewQuestion,
     checkAnswer,
     onComplete,
-    () => {}
+    () => generateNewQuestion(),
+    LangList.ru,
+    getNumberText(dessertCount)
   );
 
   useEffect(() => {
@@ -78,10 +87,7 @@ const NumbersGame = ({ onComplete }: NumbersGameProps) => {
   }, [generateNewQuestion]);
 
   const handleOptionClick = (option: number) => {
-    if (!isCorrect) {
-      speakRussianAndEnglishNumber(option);
-      handleAnswer(option);
-    }
+    handleAnswer(option);
   };
 
   const DessertComponent = isIceCream ? IceCreamSvg : CakeSvg;

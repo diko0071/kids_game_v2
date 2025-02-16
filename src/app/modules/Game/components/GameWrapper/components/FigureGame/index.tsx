@@ -46,26 +46,31 @@ const FigureGame = ({ onComplete }: FigureGameProps) => {
 
   const speakRussianAndEnglishWord = useCallback(
     (figure: string) => {
-      const word = FIGURE_WORDS[figure as keyof typeof FIGURE_WORDS][0];
-
-      const lang = !!getRandomNumber(0, 1) ? LangList.ru : LangList.en;
-      const text = word[lang];
-
+      const word = FIGURE_WORDS[figure as keyof typeof FIGURE_WORDS];
+      if (!word) return;
+      
       dispatch(
         gameInfoActions.setSpeakerText({
-          text,
-          lang,
+          text: `${word.ru}|${word.en}`,
+          lang: LangList.ru,
         })
       );
     },
     [dispatch]
   );
 
+  const getFigureText = useCallback((figure: string) => {
+    const word = FIGURE_WORDS[figure as keyof typeof FIGURE_WORDS];
+    return word ? `${word.ru}|${word.en}` : '';
+  }, []);
+
   const { isCorrect, message, handleAnswer } = useGameLogic(
     generateNewQuestion,
     checkAnswer,
     onComplete,
-    () => {}
+    () => {},
+    LangList.ru,
+    getFigureText(currentFigure.name)
   );
 
   useEffect(() => {
